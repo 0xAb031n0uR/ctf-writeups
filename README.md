@@ -1,4 +1,2 @@
-# ctf-writeups
-
-## IEEE 
+# IEEE 
  [B!inded!](./ieee/B!inded!.md)
