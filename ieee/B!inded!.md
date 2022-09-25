@@ -9,7 +9,7 @@ Points : 200
 
 ## Enumeration 
  
-once i opened the challenge i found this page 
+once i opened the challenge i found this login page 
 
 ![loginpage](../assets/ieee/B!inded!/login-page.jpeg)
 
