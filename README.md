@@ -1,4 +1,4 @@
 # ctf-writeups
 
 ## IEEE 
- [B!inded!](./ieee/README.md)
+ [B!inded!](./ieee/B!inded!.md)
