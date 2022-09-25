@@ -1,5 +1,5 @@
 # B!inded! (Web Challenge)
-
+### First it is my first time to write writeups so it will be nice if you have a negative feedback for me :)
 ## Description 
 
 ```
@@ -12,7 +12,7 @@ Points : 200
  
 once i opened the challenge i found this page 
 
-[loginpage](./assets/ieee/login-page)
+[loginpage](./assets/ieee/B!inded!/login-page)
 
 And we have a hint on the description that tell us we don't need to fuzzing so our entry is the login page 
 so i tried ```admin``` ```admin``` in the user and pass , i have got response ```wrong password``` so now i know that we have admin username . 
@@ -180,6 +180,5 @@ print("FLAG : " flag)
 AND finnaly i have got FLAG : EGCERT{flaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaag}
 ```
 
-
-#### Linked in : https://www.linkedin.com/in/maboelnour12/
+#### Linkedin : https://www.linkedin.com/in/maboelnour12/
 #### Facebook : https://www.facebook.com/maboelnour12
