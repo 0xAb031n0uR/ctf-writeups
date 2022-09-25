@@ -67,7 +67,7 @@ so if we have table name = users and column name = user we can enum users with q
 
 operator ```like '%a%``` : will finds any values that have a on any position  
 
-then i have searched about how to extract tables from SQLitedb and found this payloads in payloadsALLTheThings on github : https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/SQL%20Injection/SQLite%20Injection.md#sqlite-version
+then i have searched about how to extract tables from SQLitedb and found this payloads in payloadsALLTheThings on github : [https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/SQL%20Injection/SQLite%20Injection.md#sqlite-version](https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/SQL%20Injection/SQLite%20Injection.md#sqlite-version)
 
 
 I got this query to Extract table names
@@ -173,5 +173,5 @@ print("FLAG : " flag)
 AND finnaly i have got FLAG The : EGCERT{flaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaag}
 ```
 
-#### Linkedin : https://www.linkedin.com/in/maboelnour12/
-#### Facebook : https://www.facebook.com/maboelnour12
+#### Linkedin : [https://www.linkedin.com/in/maboelnour12/](https://www.linkedin.com/in/maboelnour12/)
+#### Facebook : [https://www.facebook.com/maboelnour12](https://www.facebook.com/maboelnour12)
