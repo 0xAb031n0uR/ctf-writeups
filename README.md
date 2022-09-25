@@ -1,3 +1,3 @@
 # ctf-writeups
-## NOSQL 
-## blind-NOSQL
+
+## IEEE - B!inded!
