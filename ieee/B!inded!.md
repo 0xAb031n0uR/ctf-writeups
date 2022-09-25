@@ -24,13 +24,7 @@ so i fired up my burp and send ```a``` in user and ```a``` in pass
 And i have noticed that username and password converted to hex and sperated by four zeros 
 for example a = 61 in hex so our request will be like this 
 
-```
-POST /login HTTP/1.1
-Host: challenge.com
-
-61000061
-
-```
+[request](./assets/ieee/B!inded!/request)
 
 and the response of this request is
 
