@@ -57,7 +57,7 @@ so i tried ```admin"select sqlite_version()-- -``` , and response was Wrong pass
 
 and so on
 
-+ we have alos SQL LIKE Operator : you can check it on "[](https://www.w3schools.com/sql/sql_like.asp)"
++ we have alos SQL LIKE Operator : you can check it on "[https://www.w3schools.com/sql/sql_like.asp](https://www.w3schools.com/sql/sql_like.asp)"
 
 
 
