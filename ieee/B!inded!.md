@@ -5,14 +5,13 @@
 ```
 No fuzzing is needed, just get the flag , Format : EGCERT{flag}
 Points : 200
-
 ```
 
 ## Enumeration 
  
 once i opened the challenge i found this page 
 
-[loginpage](./assets/ieee/B!inded!/login-page)
+[loginpage](./assets/ieee/B!inded!/login-page.jpeg)
 
 And we have a hint on the description that tell us we don't need to fuzzing so our entry is the login page 
 so i tried ```admin``` ```admin``` in the user and pass , i have got response ```wrong password``` so now i know that we have admin username . 
@@ -24,7 +23,7 @@ so i fired up my burp and send ```a``` in user and ```a``` in pass
 And i have noticed that username and password converted to hex and sperated by four zeros 
 for example a = 61 in hex so our request will be like this 
 
-[request](./assets/ieee/B!inded!/request)
+[request](./assets/ieee/B!inded!/request.png)
 
 and the response of this request is
 
