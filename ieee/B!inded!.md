@@ -127,14 +127,14 @@ Flag table name : Flag_jnk249
 
 So now we have the table name 
 
-before brute force column i have try this payload 
+before bruteforce column i have try this payload 
 
 ```
 admin"select flag from Flag_jnk249-- -
 ```
-and i got Wrong password so our column name is flag 
+And I got ```Wrong password``` so our column name is ```flag``` , I have avoided column bruteforcing :)
 
-I modified my previse script to get the flag 
+I modified my previous script to get the flag 
 
 
 ```python
